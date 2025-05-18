@@ -1,0 +1,4 @@
+verify_email:
+    expired_in:
+        one_hour: "1 heure"
+        many_hours: "%count% heures"

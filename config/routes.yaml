@@ -1,0 +1,62 @@
+controllers:
+    resource: ../src/Controller/
+    type: annotation
+
+kernel:
+    resource: ../src/Kernel.php
+    type: annotation
+
+home:
+    path: /
+    controller: App\Controller\HomeController::index
+
+product_details:
+    path: /product/{id}
+    controller: App\Controller\ProductController::productDetails
+
+registration:
+    path: /register
+    controller: App\Controller\RegistrationController::register
+
+login:
+    path: /login
+    controller: App\Controller\SecurityController::login
+    
+logout:
+    path: /logout
+    controller: App\Controller\SecurityController::logout
+
+add_to_cart:
+    path: /add-to-cart/{productId}
+    controller: App\Controller\CartController::addToCart
+    methods: [GET]
+
+cart:
+    path: /cart
+    controller: App\Controller\CartController::viewCart
+    methods: [GET]
+forgot_password:
+    path: /mot-de-passe-oublie
+    controller: App\Controller\AuthController::forgotPassword
+
+confirm_reset_password:
+    path: /confirmer-reset-mot-de-passe/{email}
+    controller: App\Controller\AuthController::confirmResetPassword
+
+remove_from_cart:
+    path: /remove-from-cart/{id}
+    controller: App\Controller\CartController::removeFromCart
+    methods: [GET]
+
+app_stripe:
+    path: /stripe
+    controller: App\Controller\StripeController::index
+
+admin_dashboard:
+    path: /admin
+    controller: App\Controller\AdminController::index 
+
+order_history:
+    path: /order/history
+    controller: App\Controller\OrderController::history
+    methods: [GET] 
