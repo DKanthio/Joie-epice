@@ -6,7 +6,7 @@
 > ### 1. Cloner le dépôt
 git clone https://github.com/DKanthio/Joie-epice.git
 cd Joie-epice
-2. Installer les dépendances
+2. Installer les dépendances:
 composer install
 
 3. Configuration de l’environnement
