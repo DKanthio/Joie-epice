@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - Joie Épice</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        nav a {
+            list-style-type: none;
+            color:#243748;
+            margin: 0; 
+            padding: 0; 
+            margin-top: auto;
+        }
+        a {
+            list-style-type: none;
+            color:#243748;
+            margin: 0; 
+            padding: 0; 
+            margin-top: auto;
+        }
+       .logo img {
+            max-width: 130px; 
+            height: auto; 
+        }
+        header {
+            background-color: white;
+            padding: 10px 20px; 
+            display: flex; 
+            align-items: flex-start; 
+            justify-content: space-between; 
+        }
+        .container {
+            width: 100%
+            height:300 px;
+            margin: auto;
+            padding: 15px;
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+        .btn-primary {
+            background-color: #cd2c2e;
+            width:100%;
+            border-color: #cd2c2e;
+            border-radius: 15px;
+        }
+        .btn-primary:hover {
+            background-color: #a82222;
+        }
+        .login-image {
+            width: 100%;
+            height: auto;
+            border-radius: 15px;
+            max-height: 900px; 
+        }
+        @media (min-width: 900px) {
+            .login-image-container {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
+            }
+            .img-fluid{
+                max-height: 100%; 
+            }
+            }
+        body{
+            font-family: 'Bebas Neue', sans-serif;
+        }
+        .btn-primary {
+            background-color: #f28705;
+            border-color: #cd2c2e;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        @media (max-width: 768px) {
+            header .row {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: nowrap;
+            }
+
+            nav a i {
+            font-size: 0.55rem; 
+            }
+
+             
+            .logout-link {
+            font-size: 0.30rem;
+            }
+
+            .logo, .text-right {
+            max-width: 120px;
+            height: auto;
+            flex: 0 0 auto;
+            margin: 0;
+            padding: 0;
+        
+            text-align: center;
+            }
+            nav a {
+                margin-left: 10px;
+                font-size: 1.0rem;
+               
+            }
+
+            .text-right {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            flex: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+ <header>
+        <div class="container">
+            <div class="row align-items-center"> 
+                <div class="col-md-6 logo"> 
+                   <a href="{{ path('home') }}">
+                      <img src="{{ asset('images/logo_joie_epice.png') }}" alt="Logo">
+                   </a>
+                </div>
+                <div class="col-md-6 text-right"> <!-- Utiliser une colonne Bootstrap et aligner à droite -->
+                    <nav>
+                        <a href="{{ path('cart') }}" class="text ml-3"><i class="fas fa-shopping-bag"></i></a>
+                        <a href="{{ path('login') }}" class="text ml-3"><i class="fas fa-user"></i></a>
+                        {% if app.user %}
+                            <a href="{{ path('app_logout') }}" class="text ml-3 logout-link"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+                        {% endif %}
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6 login-image-container">
+                <!-- Image à gauche -->
+                <img src="{{ asset('images/connexion.jpg') }}" class="img-fluid login-image" alt="Image de connexion">
+            </div>
+            <div class="col-md-6">
+                <!-- Formulaire de connexion à droite -->
+                <form method="post" action="{{ path('app_login') }}">
+                    {% if error %}
+                        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                    {% endif %}
+
+                    {% if app.user %}
+                        <div class="mb-3">
+                            Vous êtes connecté en tant que {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Déconnexion</a>
+                        </div>
+                    {% endif %}
+
+                    <h1 class="h3 mb-3 font-weight-normal">Connexion</h1>
+                    
+                    <div class="form-group">
+                        <label for="inputUsername">Nom d'utilisateur</label>
+                        <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" autocomplete="username" required autofocus>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="inputPassword">Mot de passe</label>
+                        <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <a href="{{ path('forgot_password') }}">Mot de passe oublié ?</a>
+                    </div>
+
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                    <button class="btn btn-primary" type="submit">
+                        Se connecter
+                    </button>
+
+                    <p class="mt-3">
+                        <a href="{{ path('app_register') }}">S'inscrire</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+    </main>
+
+   <footer class="bg-dark text-white p-3 text-center mt-4">
+        &copy; 2024 JOIE-EPICE. Tous droits réservés.
+    </footer>
+
+    <!-- Bootstrap JS, Popper.js, and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

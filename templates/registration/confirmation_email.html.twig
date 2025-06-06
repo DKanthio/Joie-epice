@@ -1,0 +1,16 @@
+<h1>Bonjour {{ username }}, et bienvenue sur notre site.<br></h1>
+
+<p style="text-align:center;">
+  <img src="https://i.imgur.com/BzFM1JU.png" alt="Logo JOIE-EPICE" style="width:150px; height:auto;">
+</p>
+
+
+<p>
+   Veuillez confirmer votre compte dès maintenant en cliquant sur le lien ci-dessous : <br><br>
+   <a href="{{ signedUrl|raw }}" style="display:inline-block; padding:10px 20px; background:#28a745; color:#fff; text-decoration:none; border-radius:5px;">Confirmer mon Email</a>.
+   {{ expiresAtMessage }} 
+</p>
+
+<p>
+   JOIE-EPICE!
+</p>

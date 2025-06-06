@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Panier</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+      <style>
+        .logo {
+            text-align: center;
+        }
+        body{
+            font-family: 'Bebas Neue', sans-serif;
+        }
+        .logo img {
+            max-width: 130px; 
+            height: auto; 
+        }
+        .carousel-image {
+            height: 450px;
+            object-fit: cover; 
+        }
+        header {
+           
+            background-color: white;
+            padding: 10px 20px; 
+            display: flex; 
+            align-items: flex-start; 
+            justify-content: space-between; 
+        }
+
+        footer{
+            width:100%;
+        }
+
+        nav a {
+            list-style-type: none;
+            color:#243748;
+            margin: 0; 
+            padding: 0; 
+            margin-top: auto;
+        }
+        .card {
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: none
+            width:200px;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+        .btn-primary {
+            background-color: #f28705;
+            border-color: #cd2c2e;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #f20530;
+            transform: scale(1.05);
+        }
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1; 
+        }
+        @media (max-width: 768px) {
+            header .row {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: nowrap;
+            }
+
+            nav a i {
+            font-size: 0.95rem; 
+            }
+            .logo, .text-right {
+            max-width: 150px;
+            height: auto;
+            flex: 0 0 auto;
+            margin: 0;
+            padding: 0;
+        
+            text-align: center;
+            }
+            nav a {
+                margin-left: 10px;
+                font-size: 1.1rem;
+               
+            }
+
+            .text-right {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            flex: 1;
+            }
+            
+        }
+    </style>
+
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="row align-items-center"> 
+                <div class="col-md-6 logo">
+                    <a href="{{ path('home') }}">
+                      <img src="{{ asset('images/logo_joie_epice.png') }}" alt="Logo">
+                   </a>
+                </div>
+                <div class="col-md-6 text-right"> 
+                    <nav>
+                        <a href="{{ path('cart') }}" class="text ml-3"><i class="fas fa-shopping-bag"></i></a>
+                        <a href="{{ path('login') }}" class="text ml-3"><i class="fas fa-user"></i></a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main>
+    <div class="container mt-4">
+        {# Affichage des messages flash #}
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+
+    <div class="container mt-4">
+        {% for item in cart %}
+        <div class="card mb-3" style="max-width: 767px;">
+            <div class="row no-gutters">
+                <div class="col-md-3">
+                    <img src="{{ asset('images/' ~ item.product.image) }}" class="card-img" alt="{{ item.product.name }}">
+                </div>
+                <div class="col-md-3">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.product.name }}</h5>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card-body">
+                        <p class="card-text">{{ item.product.price }}€</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card-body">
+                        <p class="card-text">Quantité: {{ item.quantity }}</p>
+                        <div class="btn-group" role="group">
+                            <a href="{{ path('decrease_quantity', {'id': item.id}) }}" class="btn btn-secondary">-</a>
+                            <span class="btn btn-light">{{ item.quantity }}</span>
+                            <a href="{{ path('increase_quantity', {'id': item.id}) }}" class="btn btn-secondary">+</a>
+                        </div>
+                        <a href="{{ path('remove_from_cart', {'id': item.id}) }}" class="btn btn-danger mt-2">Retirer du panier</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="container mb-3 ml-md-2">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="card-title text-right">Total: {{ total }}€</h5>
+                </div>
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-md-8 mb-2">
+                            <a href="{{ path('app_stripe') }}" class="btn btn-danger btn-sm btn-block">Finaliser ma commande</a>
+                        </div>
+                        <div class="col-md-8">
+                            <a href="{{ path('home') }}" class="btn btn-success btn-sm btn-block">Continuer mes achats</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </main>
+    
+    <footer class="bg-dark text-white p-3 text-center mt-4">
+        &copy; 2024 JOIE-EPICE. Tous droits réservés.
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

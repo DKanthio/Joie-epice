@@ -1,0 +1,140 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Back-office - Gestion des Produits</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        label {
+            display: block;
+            font-weight: bold;
+        }
+        .product-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border: 1px solid #ccc;
+        }
+        .card-title {
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .btn-wide {
+            width: 150px;
+        }
+        .form-control-sm {
+            width: 150px;
+        }
+        .editForm {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Formulaire d'ajout de produit -->
+    <div class="row mt-3">
+        <div class="col-md-12">
+            <div class="card">
+                <form method="POST" action="{{ path('admin_dashboard') }}">
+                    <div class="card-body">
+                        <h5>Ajouter un nouveau produit</h5>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <input type="text" name="image" class="product-image form-control" placeholder="Image" required>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" name="name" class="form-control-sm form-control" placeholder="Nom" required>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" name="price" class="form-control-sm form-control" placeholder="Prix" required>
+                            </div>
+                            <div class="col-md-4">
+                                <textarea name="description" class="form-control-sm form-control" placeholder="Description" required></textarea>
+                            </div>
+
+                            <div class="col-md-4 text-right">
+                                <input type="submit" class="btn btn-success btn-wide" name="ajouter" value="Ajouter">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Liste des produits -->
+    <div class="row mt-4">
+        {% for product in products %}
+            <div class="col-md-12 mb-3">
+                <div class="card">
+                    <div class="row no-gutters">
+                        <div class="col-md-2">
+                            <img src="{{ asset('images/' ~ product.image) }}" alt="{{ product.name }}" class="product-image">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Nom : {{ product.name }}</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Prix : {{ product.price }}€</label>
+                                    </div>
+                                    
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-6 text-right">
+                                        <form method="POST" action="{{ path('admin_dashboard') }}" class="d-inline">
+                                            <input type="hidden" name="productId" value="{{ product.id }}">
+                                            <input type="submit" class="btn btn-danger btn-wide" name="supprimer" value="Supprimer">
+                                        </form>
+                                        <button class="btn btn-primary btn-wide" onclick="toggleEditForm('{{ product.id }}')">Modifier</button>
+                                    </div>
+                                </div>
+                                <!-- Formulaire de modification -->
+                                <div id="editForm{{ product.id }}" class="editForm mt-3">
+                                    <form method="POST" action="{{ path('admin_dashboard') }}">
+                                        <input type="hidden" name="productId" value="{{ product.id }}">
+                                        <div class="form-group">
+                                            <label>Nom</label>
+                                            <input type="text" name="name" value="{{ product.name }}" class="form-control mb-2" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Prix</label>
+                                            <input type="text" name="price" value="{{ product.price }}" class="form-control mb-2" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Description</label>
+                                            <textarea name="description" class="form-control mb-2" rows="3" required>{{ product.description }}</textarea>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Image</label>
+                                            <input type="text" name="image" value="{{ product.image }}" class="form-control mb-2">
+                                        </div>
+                                        <input type="submit" class="btn btn-primary" name="modifier" value="Enregistrer les modifications">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    function toggleEditForm(productId) {
+        const editForm = document.getElementById("editForm" + productId);
+        editForm.style.display = editForm.style.display === "none" || editForm.style.display === "" ? "block" : "none";
+    }
+</script>
+</body>
+</html>
